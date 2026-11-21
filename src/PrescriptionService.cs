@@ -192,21 +192,28 @@ public class PrescriptionService
         prescription.History.Add(prescription.Status + " " + dispensedQuantity);
     }
 
-    private static decimal CalculateCharge(Prescription prescription, Medicine medicine, int dispensedQuantity)
+    private static decimal CalculateCharge(Prescription prescription, Medicine medicine,
+        int dispensedQuantity)
     {
-        decimal paymentFactor = 1m;
-        switch (prescription.Category)
-        {
-            case "PENSIONER":
-                paymentFactor = PensionerPaymentFactor;
-                if (DateTime.Today < new DateTime(2025, 4, 1))
-                    paymentFactor = FormerPensionerPaymentFactor;
-                break;
-            case "DISABLED":
-                paymentFactor = 0m;
-                break;
-        }
-        return Math.Round(medicine.Price * dispensedQuantity * paymentFactor, MoneyDecimalPlaces);
+        return Math.Round(medicine.Price * dispensedQuantity * PaymentFactor(prescription), MoneyDecimalPlaces);
+    }
+
+
+    private static decimal PaymentFactor(Prescription prescription)
+    {
+        if (prescription.Category == "PENSIONER")
+            return PensionerFactor();
+        if (prescription.Category == "DISABLED")
+            return 0m;
+        return 1m;
+    }
+    private static decimal PensionerFactor()
+    {
+        return IsFormerBenefitPeriod() ? FormerPensionerPaymentFactor : PensionerPaymentFactor;
+    }
+    private static bool IsFormerBenefitPeriod()
+    {
+        return DateTime.Today < new DateTime(2025, 4, 1);
     }
 
 }
