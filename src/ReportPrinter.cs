@@ -30,15 +30,7 @@ public class ReportPrinter
         foreach (Medicine m in repo.Medicines)
         {
             string code = m.Code;
-            int total = 0;
-            foreach (StockBatch b in repo.Batches)
-            {
-                if (b.MedicineCode != code)
-                    continue;
-                if (b.ExpiryDate < DateTime.Today)
-                    continue;
-                total = total + b.Qty;
-            }
+            int total = repo.UsableStock(code);
             string flag = total < 3 ? "  <-- reorder" : "";
             Console.WriteLine("  " + code.PadRight(7) + total.ToString().PadLeft(4) + flag);
         }

@@ -55,4 +55,19 @@ public class StockRepository
         }
         return res;
     }
+
+    public int UsableStock(string code)
+    {
+        int total = 0;
+        foreach (StockBatch b in Batches)
+        {
+            if (b.MedicineCode != code)
+                continue;
+            if (b.ExpiryDate < DateTime.Today)
+                continue;
+            total = total + b.Qty;
+        }
+        return total;
+    }
+
 }

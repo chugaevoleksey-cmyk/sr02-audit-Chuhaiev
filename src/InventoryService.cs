@@ -32,15 +32,7 @@ public class InventoryService
             Console.WriteLine("  receive: " + batchNo + " expires too soon");
             return false;
         }
-        int total = 0;
-        foreach (StockBatch b in repo.Batches)
-        {
-            if (b.MedicineCode != code)
-                continue;
-            if (b.ExpiryDate < DateTime.Today)
-                continue;
-            total = total + b.Qty;
-        }
+        int total = repo.UsableStock(code);
         if (total + qty > ShelfCapacity)   // temporary limit until shelves are in the catalog
         {
             Console.WriteLine("  receive: " + code + " over shelf limit (" + total + ")");

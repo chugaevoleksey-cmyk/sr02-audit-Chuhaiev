@@ -110,19 +110,7 @@ public class PrescriptionService
         return true;
     }
 
-    private int StockOf(string code)
-    {
-        int total = 0;
-        foreach (StockBatch b in repo.Batches)
-        {
-            if (b.MedicineCode != code)
-                continue;
-            if (b.ExpiryDate < DateTime.Today)
-                continue;
-            total = total + b.Qty;
-        }
-        return total;
-    }
+
 
     private bool ValidatePrescription(Prescription prescription, string prescriptionNumber)
     {
@@ -150,13 +138,13 @@ public class PrescriptionService
         int requestedQuantity, bool allowGeneric)
     {
         string medicineCode = medicine.Code;
-        if (!allowGeneric || StockOf(medicineCode) >= requestedQuantity)
+        if (!allowGeneric || repo.UsableStock(medicineCode) >= requestedQuantity)
             return medicineCode;
         foreach (Medicine generic in repo.Medicines)
         {
             if (generic.Inn != medicine.Inn || generic.Code == medicineCode)
                 continue;
-            if (StockOf(generic.Code) < requestedQuantity)
+            if (repo.UsableStock(generic.Code) < requestedQuantity)
                 continue;
             prescription.History.Add("Generic " + generic.Code);
             return generic.Code;
