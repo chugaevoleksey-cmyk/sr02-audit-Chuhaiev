@@ -149,23 +149,20 @@ public class PrescriptionService
         return true;
     }
 
-    private string SelectMedicineCode(Prescription prescription, Medicine medicine, int requestedQuantity, bool allowGeneric)
+    private string SelectMedicineCode(Prescription prescription, Medicine medicine,
+        int requestedQuantity, bool allowGeneric)
     {
         string medicineCode = medicine.Code;
-        if (allowGeneric && StockOf(medicineCode) < requestedQuantity)
+        if (!allowGeneric || StockOf(medicineCode) >= requestedQuantity)
+            return medicineCode;
+        foreach (Medicine generic in repo.Medicines)
         {
-            foreach (Medicine generic in repo.Medicines)
-            {
-                if (generic.Inn == medicine.Inn && generic.Code != medicineCode)
-                {
-                    if (StockOf(generic.Code) >= requestedQuantity)
-                    {
-                        prescription.History.Add("Generic " + generic.Code);
-                        medicineCode = generic.Code;
-                        break;
-                    }
-                }
-            }
+            if (generic.Inn != medicine.Inn || generic.Code == medicineCode)
+                continue;
+            if (StockOf(generic.Code) < requestedQuantity)
+                continue;
+            prescription.History.Add("Generic " + generic.Code);
+            return generic.Code;
         }
         return medicineCode;
     }
