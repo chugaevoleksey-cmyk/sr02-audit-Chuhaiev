@@ -45,8 +45,6 @@ public class PrescriptionService
         p.Doctor = doctor;
         p.History.Add("Issued");
         repo.Prescriptions.Add(p);
-        // SmsGateway.Send(phone, "Rx " + p.Number + " registered");
-        // p.History.Add("SMS");
         AuditLog.Write("ISSUE", p.Number + " " + code + " x" + qty);
         return p.Number;
     }
