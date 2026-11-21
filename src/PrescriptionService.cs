@@ -2,6 +2,11 @@ namespace PharmacyStock;
 
 public class PrescriptionService
 {
+    private static readonly Dictionary<PrescriptionStatus, Func<PrescriptionStatus, bool>> StatusTransitions = new()
+    {
+        [PrescriptionStatus.Issued] = to => to == PrescriptionStatus.Cancelled || to == PrescriptionStatus.Expired,
+        [PrescriptionStatus.PartiallyDispensed] = to => to > PrescriptionStatus.PartiallyDispensed,
+    };
     private const int MaximumIssueQuantity = 10;
     private const int ControlledValidDays = 10;
     private const int DefaultValidDays = 30;
@@ -94,11 +99,7 @@ public class PrescriptionService
         Prescription p = repo.FindPrescription(no);
         if (p == null)
             return false;
-        bool ok = false;
-        if (p.Status == PrescriptionStatus.Issued)
-            ok = to == PrescriptionStatus.Cancelled || to == PrescriptionStatus.Expired;
-        else if (p.Status == PrescriptionStatus.PartiallyDispensed)
-            ok = to > PrescriptionStatus.PartiallyDispensed;   // закрити залишок
+        bool ok = StatusTransitions.TryGetValue(p.Status, out var allowed) && allowed(to);
         if (!ok)
         {
             Console.WriteLine("Cannot change " + no + ": " + p.Status + " -> " + to);
