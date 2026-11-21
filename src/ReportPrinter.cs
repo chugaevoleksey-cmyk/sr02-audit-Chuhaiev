@@ -3,7 +3,6 @@ namespace PharmacyStock;
 public class ReportPrinter
 {
     private StockRepository repo;
-    private decimal dayTotal;        // рахується в PrintDay
 
     public ReportPrinter(StockRepository r)
     {
@@ -38,7 +37,6 @@ public class ReportPrinter
 
     public void PrintDay()
     {
-        dayTotal = 0m;
         int served = 0, open = 0, pens = 0, dis = 0;
         Console.WriteLine("Register:");
         foreach (Prescription p in repo.Prescriptions)
@@ -46,7 +44,6 @@ public class ReportPrinter
             PrintRegisterLine(p);
             if (p.DispensedQty > 0)
                 served++;
-            dayTotal = dayTotal + p.Paid;
             switch (p.Category)
             {
                 case "PENSIONER":
@@ -62,8 +59,8 @@ public class ReportPrinter
         }
         Console.WriteLine("Served: " + served + ", still open: " + open);
         Console.WriteLine("Benefit patients: " + pens + " pensioner(s), " + dis + " disabled");
-        decimal vat = Math.Round(dayTotal * 7 / 107, 2);   // ПДВ на ліки 20%
-        Console.WriteLine("Cash: " + dayTotal.ToString("0.00") + ", VAT " + vat.ToString("0.00"));
+        decimal vat = Math.Round(DayTotal() * 7 / 107, 2);   // ПДВ на ліки 20%
+        Console.WriteLine("Cash: " + DayTotal().ToString("0.00") + ", VAT " + vat.ToString("0.00"));
     }
 
     private static void PrintRegisterLine(Prescription p)
@@ -76,6 +73,12 @@ public class ReportPrinter
         if (p.Paid > 0)
             line = line + " | paid " + p.Paid.ToString("0.00");
         Console.WriteLine("  " + line);
+    }
+
+
+    private decimal DayTotal()
+    {
+        return repo.Prescriptions.Sum(p => p.Paid);
     }
 
 }
