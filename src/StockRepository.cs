@@ -4,9 +4,9 @@ namespace PharmacyStock;
 public class StockRepository
 {
     private static int nextNo = 1;   // спільна нумерація для всіх кас
-    public List<Medicine> Medicines = new List<Medicine>();
-    public List<StockBatch> Batches = new List<StockBatch>();
-    public List<Prescription> Prescriptions = new List<Prescription>();
+    public List<Medicine> Medicines { get; } = new List<Medicine>();
+    public List<StockBatch> Batches { get; } = new List<StockBatch>();
+    public List<Prescription> Prescriptions { get; } = new List<Prescription>();
 
     public string NextNumber()
     {
