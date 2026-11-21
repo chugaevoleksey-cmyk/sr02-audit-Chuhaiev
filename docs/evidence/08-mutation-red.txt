@@ -1,0 +1,24 @@
+$ dotnet test -c Release --no-restore
+
+  Legacy -> C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\src\bin\Release\net8.0\Legacy.dll
+  Legacy.Tests -> C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\Legacy.Tests\bin\Release\net8.0\Legacy.Tests.dll
+Test run for C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\Legacy.Tests\bin\Release\net8.0\Legacy.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 17.11.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed Legacy.Tests.CharacterizationTests.Dispense_Category_ReturnsCapturedAmount(category: "PENSIONER", expected: 100) [1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 100
+Actual:   120.0
+  Stack Trace:
+     at Legacy.Tests.CharacterizationTests.Dispense_Category_ReturnsCapturedAmount(String category, Int32 expected) in C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\Legacy.Tests\CharacterizationTests.cs:line 47
+   at InvokeStub_CharacterizationTests.Dispense_Category_ReturnsCapturedAmount(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+Failed!  - Failed:     1, Passed:    41, Skipped:     0, Total:    42, Duration: 27 ms - Legacy.Tests.dll (net8.0)
+[xUnit.net 00:00:00.20]     Legacy.Tests.CharacterizationTests.Dispense_Category_ReturnsCapturedAmount(category: "PENSIONER", expected: 100) [FAIL]
+
+Exit code: 1
+Wall seconds: 1.918

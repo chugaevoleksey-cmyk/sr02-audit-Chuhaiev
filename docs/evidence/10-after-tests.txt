@@ -1,0 +1,17 @@
+$ dotnet test -c Release --no-restore --collect:XPlat Code Coverage --results-directory C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr2-evidence\coverage-after
+
+  Legacy -> C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\src\bin\Release\net8.0\Legacy.dll
+  Legacy.Tests -> C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\Legacy.Tests\bin\Release\net8.0\Legacy.Tests.dll
+Test run for C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\Legacy.Tests\bin\Release\net8.0\Legacy.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 17.11.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    42, Skipped:     0, Total:    42, Duration: 30 ms - Legacy.Tests.dll (net8.0)
+
+Attachments:
+  C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr2-evidence\coverage-after\0837a180-2809-491c-b8ec-aaf190f41695\coverage.cobertura.xml
+
+Exit code: 0
+Wall seconds: 2.659

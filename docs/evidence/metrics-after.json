@@ -1,0 +1,842 @@
+{
+  "Inventory": [
+    {
+      "File": "AuditLog.cs",
+      "Physical": 20,
+      "Logical": 11,
+      "Types": 1,
+      "Methods": 1,
+      "PublicMethods": 1
+    },
+    {
+      "File": "BenefitPricing.cs",
+      "Physical": 33,
+      "Logical": 18,
+      "Types": 1,
+      "Methods": 4,
+      "PublicMethods": 1
+    },
+    {
+      "File": "InventoryService.cs",
+      "Physical": 48,
+      "Logical": 29,
+      "Types": 1,
+      "Methods": 2,
+      "PublicMethods": 2
+    },
+    {
+      "File": "Medicine.cs",
+      "Physical": 33,
+      "Logical": 20,
+      "Types": 2,
+      "Methods": 2,
+      "PublicMethods": 2
+    },
+    {
+      "File": "Prescription.cs",
+      "Physical": 39,
+      "Logical": 24,
+      "Types": 2,
+      "Methods": 2,
+      "PublicMethods": 2
+    },
+    {
+      "File": "PrescriptionService.cs",
+      "Physical": 188,
+      "Logical": 127,
+      "Types": 1,
+      "Methods": 8,
+      "PublicMethods": 4
+    },
+    {
+      "File": "Program.cs",
+      "Physical": 107,
+      "Logical": 84,
+      "Types": 1,
+      "Methods": 5,
+      "PublicMethods": 1
+    },
+    {
+      "File": "ReportPrinter.cs",
+      "Physical": 84,
+      "Logical": 55,
+      "Types": 1,
+      "Methods": 6,
+      "PublicMethods": 4
+    },
+    {
+      "File": "StockRepository.cs",
+      "Physical": 73,
+      "Logical": 45,
+      "Types": 1,
+      "Methods": 6,
+      "PublicMethods": 6
+    }
+  ],
+  "Methods": [
+    {
+      "Class": "AuditLog",
+      "Method": "Write",
+      "LOC": 6,
+      "CC": 3,
+      "Depth": 3,
+      "Parameters": 2,
+      "FanOut": 0,
+      "File": "AuditLog.cs",
+      "Start": 9,
+      "End": 19,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 11
+        },
+        {
+          "Kind": "CatchClause",
+          "Line": 18
+        }
+      ]
+    },
+    {
+      "Class": "BenefitPricing",
+      "Method": "CalculateCharge",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 3,
+      "FanOut": 2,
+      "File": "BenefitPricing.cs",
+      "Start": 9,
+      "End": 13,
+      "Branches": []
+    },
+    {
+      "Class": "BenefitPricing",
+      "Method": "PaymentFactor",
+      "LOC": 5,
+      "CC": 3,
+      "Depth": 2,
+      "Parameters": 1,
+      "FanOut": 2,
+      "File": "BenefitPricing.cs",
+      "Start": 15,
+      "End": 22,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 17
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 19
+        }
+      ]
+    },
+    {
+      "Class": "BenefitPricing",
+      "Method": "PensionerFactor",
+      "LOC": 1,
+      "CC": 2,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 2,
+      "File": "BenefitPricing.cs",
+      "Start": 24,
+      "End": 27,
+      "Branches": [
+        {
+          "Kind": "ConditionalExpression",
+          "Line": 26
+        }
+      ]
+    },
+    {
+      "Class": "BenefitPricing",
+      "Method": "IsFormerBenefitPeriod",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 2,
+      "File": "BenefitPricing.cs",
+      "Start": 29,
+      "End": 32,
+      "Branches": []
+    },
+    {
+      "Class": "InventoryService",
+      "Method": "InventoryService.ctor",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 1,
+      "FanOut": 3,
+      "File": "InventoryService.cs",
+      "Start": 11,
+      "End": 14,
+      "Branches": []
+    },
+    {
+      "Class": "InventoryService",
+      "Method": "Receive",
+      "LOC": 20,
+      "CC": 8,
+      "Depth": 2,
+      "Parameters": 5,
+      "FanOut": 3,
+      "File": "InventoryService.cs",
+      "Start": 16,
+      "End": 47,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 19
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 24
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 24
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 24
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 30
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 36
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 42
+        }
+      ]
+    },
+    {
+      "Class": "Medicine",
+      "Method": "Medicine.ctor",
+      "LOC": 4,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 4,
+      "FanOut": 0,
+      "File": "Medicine.cs",
+      "Start": 13,
+      "End": 19,
+      "Branches": []
+    },
+    {
+      "Class": "StockBatch",
+      "Method": "IsExpired",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 0,
+      "File": "Medicine.cs",
+      "Start": 29,
+      "End": 32,
+      "Branches": []
+    },
+    {
+      "Class": "Prescription",
+      "Method": "HasBenefit",
+      "LOC": 1,
+      "CC": 2,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 1,
+      "File": "Prescription.cs",
+      "Start": 23,
+      "End": 26,
+      "Branches": [
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 25
+        }
+      ]
+    },
+    {
+      "Class": "Prescription",
+      "Method": "MaskedPhone",
+      "LOC": 4,
+      "CC": 2,
+      "Depth": 3,
+      "Parameters": 0,
+      "FanOut": 1,
+      "File": "Prescription.cs",
+      "Start": 28,
+      "End": 38,
+      "Branches": [
+        {
+          "Kind": "CatchClause",
+          "Line": 34
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "PrescriptionService.ctor",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 1,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 17,
+      "End": 20,
+      "Branches": []
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "Issue",
+      "LOC": 28,
+      "CC": 7,
+      "Depth": 3,
+      "Parameters": 7,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 23,
+      "End": 58,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 27
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 33
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 38
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 38
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 40
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 42
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "Dispense",
+      "LOC": 26,
+      "CC": 7,
+      "Depth": 3,
+      "Parameters": 4,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 60,
+      "End": 95,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 66
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 70
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 70
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 72
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 74
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 85
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "ChangeStatus",
+      "LOC": 11,
+      "CC": 4,
+      "Depth": 2,
+      "Parameters": 2,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 97,
+      "End": 112,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 100
+        },
+        {
+          "Kind": "LogicalAndExpression",
+          "Line": 102
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 103
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "ValidatePrescription",
+      "LOC": 12,
+      "CC": 4,
+      "Depth": 2,
+      "Parameters": 2,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 116,
+      "End": 136,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 118
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 123
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 129
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "SelectMedicineCode",
+      "LOC": 11,
+      "CC": 7,
+      "Depth": 3,
+      "Parameters": 4,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 138,
+      "End": 154,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 142
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 142
+        },
+        {
+          "Kind": "ForEachStatement",
+          "Line": 144
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 146
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 146
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 148
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "DeductBatches",
+      "LOC": 8,
+      "CC": 3,
+      "Depth": 3,
+      "Parameters": 2,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 156,
+      "End": 168,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 159
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 161
+        }
+      ]
+    },
+    {
+      "Class": "PrescriptionService",
+      "Method": "UpdatePrescription",
+      "LOC": 7,
+      "CC": 2,
+      "Depth": 2,
+      "Parameters": 3,
+      "FanOut": 7,
+      "File": "PrescriptionService.cs",
+      "Start": 170,
+      "End": 179,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 174
+        }
+      ]
+    },
+    {
+      "Class": "Program",
+      "Method": "Main",
+      "LOC": 28,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 1,
+      "FanOut": 6,
+      "File": "Program.cs",
+      "Start": 6,
+      "End": 37,
+      "Branches": []
+    },
+    {
+      "Class": "Program",
+      "Method": "Dispensing",
+      "LOC": 16,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 1,
+      "FanOut": 6,
+      "File": "Program.cs",
+      "Start": 39,
+      "End": 57,
+      "Branches": []
+    },
+    {
+      "Class": "Program",
+      "Method": "LoadCatalog",
+      "LOC": 18,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 6,
+      "File": "Program.cs",
+      "Start": 59,
+      "End": 79,
+      "Branches": []
+    },
+    {
+      "Class": "Program",
+      "Method": "Issue",
+      "LOC": 7,
+      "CC": 3,
+      "Depth": 3,
+      "Parameters": 6,
+      "FanOut": 6,
+      "File": "Program.cs",
+      "Start": 81,
+      "End": 95,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 87
+        },
+        {
+          "Kind": "CatchClause",
+          "Line": 91
+        }
+      ]
+    },
+    {
+      "Class": "Program",
+      "Method": "Serve",
+      "LOC": 7,
+      "CC": 3,
+      "Depth": 2,
+      "Parameters": 5,
+      "FanOut": 6,
+      "File": "Program.cs",
+      "Start": 97,
+      "End": 106,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 101
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 101
+        }
+      ]
+    },
+    {
+      "Class": "ReportPrinter",
+      "Method": "ReportPrinter.ctor",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 1,
+      "FanOut": 4,
+      "File": "ReportPrinter.cs",
+      "Start": 7,
+      "End": 10,
+      "Branches": []
+    },
+    {
+      "Class": "ReportPrinter",
+      "Method": "PrintReceipt",
+      "LOC": 10,
+      "CC": 3,
+      "Depth": 2,
+      "Parameters": 1,
+      "FanOut": 4,
+      "File": "ReportPrinter.cs",
+      "Start": 12,
+      "End": 24,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 15
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 21
+        }
+      ]
+    },
+    {
+      "Class": "ReportPrinter",
+      "Method": "PrintStock",
+      "LOC": 6,
+      "CC": 3,
+      "Depth": 2,
+      "Parameters": 0,
+      "FanOut": 4,
+      "File": "ReportPrinter.cs",
+      "Start": 26,
+      "End": 36,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 29
+        },
+        {
+          "Kind": "ConditionalExpression",
+          "Line": 33
+        }
+      ]
+    },
+    {
+      "Class": "ReportPrinter",
+      "Method": "PrintDay",
+      "LOC": 20,
+      "CC": 7,
+      "Depth": 3,
+      "Parameters": 0,
+      "FanOut": 4,
+      "File": "ReportPrinter.cs",
+      "Start": 38,
+      "End": 64,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 42
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 45
+        },
+        {
+          "Kind": "CaseSwitchLabel",
+          "Line": 49
+        },
+        {
+          "Kind": "CaseSwitchLabel",
+          "Line": 52
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 56
+        },
+        {
+          "Kind": "LogicalOrExpression",
+          "Line": 56
+        }
+      ]
+    },
+    {
+      "Class": "ReportPrinter",
+      "Method": "PrintRegisterLine",
+      "LOC": 8,
+      "CC": 3,
+      "Depth": 2,
+      "Parameters": 1,
+      "FanOut": 4,
+      "File": "ReportPrinter.cs",
+      "Start": 66,
+      "End": 76,
+      "Branches": [
+        {
+          "Kind": "IfStatement",
+          "Line": 71
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 73
+        }
+      ]
+    },
+    {
+      "Class": "ReportPrinter",
+      "Method": "DayTotal",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 4,
+      "File": "ReportPrinter.cs",
+      "Start": 79,
+      "End": 82,
+      "Branches": []
+    },
+    {
+      "Class": "StockRepository",
+      "Method": "NextNumber",
+      "LOC": 1,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 0,
+      "FanOut": 3,
+      "File": "StockRepository.cs",
+      "Start": 11,
+      "End": 14,
+      "Branches": []
+    },
+    {
+      "Class": "StockRepository",
+      "Method": "AddBatch",
+      "LOC": 7,
+      "CC": 1,
+      "Depth": 1,
+      "Parameters": 4,
+      "FanOut": 3,
+      "File": "StockRepository.cs",
+      "Start": 16,
+      "End": 25,
+      "Branches": []
+    },
+    {
+      "Class": "StockRepository",
+      "Method": "FindMedicine",
+      "LOC": 4,
+      "CC": 3,
+      "Depth": 3,
+      "Parameters": 1,
+      "FanOut": 3,
+      "File": "StockRepository.cs",
+      "Start": 27,
+      "End": 33,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 29
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 30
+        }
+      ]
+    },
+    {
+      "Class": "StockRepository",
+      "Method": "FindPrescription",
+      "LOC": 4,
+      "CC": 3,
+      "Depth": 3,
+      "Parameters": 1,
+      "FanOut": 3,
+      "File": "StockRepository.cs",
+      "Start": 35,
+      "End": 41,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 37
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 38
+        }
+      ]
+    },
+    {
+      "Class": "StockRepository",
+      "Method": "BatchesFor",
+      "LOC": 9,
+      "CC": 5,
+      "Depth": 3,
+      "Parameters": 1,
+      "FanOut": 3,
+      "File": "StockRepository.cs",
+      "Start": 44,
+      "End": 57,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 47
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 49
+        },
+        {
+          "Kind": "WhileStatement",
+          "Line": 52
+        },
+        {
+          "Kind": "LogicalAndExpression",
+          "Line": 52
+        }
+      ]
+    },
+    {
+      "Class": "StockRepository",
+      "Method": "UsableStock",
+      "LOC": 8,
+      "CC": 4,
+      "Depth": 3,
+      "Parameters": 1,
+      "FanOut": 3,
+      "File": "StockRepository.cs",
+      "Start": 59,
+      "End": 71,
+      "Branches": [
+        {
+          "Kind": "ForEachStatement",
+          "Line": 62
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 64
+        },
+        {
+          "Kind": "IfStatement",
+          "Line": 66
+        }
+      ]
+    }
+  ],
+  "CloneWindows": []
+}

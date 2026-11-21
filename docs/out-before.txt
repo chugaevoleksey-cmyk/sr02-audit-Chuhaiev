@@ -1,0 +1,59 @@
+=== Prescriptions ===
+Olena Kovalenko: NUR200 x2 -> RX-000001
+Petro Melnyk: TRM50 x4 -> RX-000002
+Ivan Bondar: MET850 x3 -> RX-000003
+Hanna Shevchuk: AMX500 x3 -> RX-000004
+Taras Lysenko: LOS50 x1 -> RX-000005
+Maria Tkachenko: LOS50 x2 -> RX-000006
+Oksana Hrytsenko: LOS50 x2 -> RX-000007
+Yurii Marchenko: AMX500 x0 -> error: Quantity must be 1..10, got 0
+Yurii Marchenko: ASP100 x1 -> rejected (Unknown medicine ASP100)
+=== Dispensing ===
+RX-000001 -> Dispensed 2/2, to pay 145,00
+RX-000002 refused: Pharmacist code required for Tramadol 50mg N10
+  [controlled log] Tramadol 50mg N10 x2, PH-07
+RX-000002 -> PartiallyDispensed 2/4, to pay 240,00
+  [controlled log] Tramadol 50mg N10 x2, PH-07
+RX-000002 -> Dispensed 4/4, to pay 240,00
+RX-000003 -> Dispensed 3/3, to pay 0,00
+RX-000004 -> PartiallyDispensed 1/3, to pay 96,00
+RX-000005 refused: Prescription RX-000005 has expired
+RX-000007 refused: Out of stock: Lozap 50mg N30
+RX-999999 refused: Prescription RX-999999 not found
+=== Status ===
+Cancel RX-000006: True
+RX-000006 refused: Prescription RX-000006 is Cancelled
+Cannot change RX-000001: Dispensed -> Cancelled
+Cancel RX-000001: False
+=== Goods receipt ===
+  received AMX500 A-2611 x20
+  receive: margin below 25% for Metformin 850mg N60
+  received MET850 M-2690 x10
+  receive: M-0777 expires too soon
+  receive: bad batch data for TRM50
+  receive: IBU200 over shelf limit (8)
+=== Reports ===
+Receipt for Olena Kovalenko, phone ***2233
+  RX-000001 | Olena Kovalenko | NUR200 | 2/2 | Dispensed | PENSIONER | paid 145,00
+  Nurofen 200mg N24, Dr. Hnatiuk, pharmacist PH-07
+  Benefit: pensioner (state program)
+  History: Issued > Generic IBU200 > Dispensed 2
+Usable stock:
+  NUR200    0  <-- reorder
+  IBU200    8
+  AMX500   20
+  MET850   19
+  TRM50     2  <-- reorder
+  LOS50     0  <-- reorder
+Register:
+  RX-000001 | Olena Kovalenko | NUR200 | 2/2 | Dispensed | PENSIONER | paid 145,00
+  RX-000002 | Petro Melnyk | TRM50 | 4/4 | Dispensed | paid 480,00
+  RX-000003 | Ivan Bondar | MET850 | 3/3 | Dispensed | DISABLED
+  RX-000004 | Hanna Shevchuk | AMX500 | 1/3 | PartiallyDispensed | paid 96,00
+  RX-000005 | Taras Lysenko | LOS50 | 0/1 | Expired
+  RX-000006 | Maria Tkachenko | LOS50 | 0/2 | Cancelled | PENSIONER
+  RX-000007 | Oksana Hrytsenko | LOS50 | 0/2 | Issued
+Served: 4, still open: 2
+Benefit patients: 2 pensioner(s), 1 disabled
+Cash: 721,00, VAT 47,17
+Dispense calls: 10

@@ -1,0 +1,14 @@
+$ dotnet build -c Release
+
+  Determining projects to restore...
+  Restored C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\src\Legacy.csproj (in 66 ms).
+  Legacy -> C:\Users\chaha\Documents\Codex\2026-11-09\referenced-chatgpt-conversation-this-is-an\work\sr02-audit-Chuhaiev\src\bin\Release\net8.0\Legacy.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.31
+
+Exit code: 0
+Wall seconds: 2.496

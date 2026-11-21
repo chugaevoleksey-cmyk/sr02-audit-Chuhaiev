@@ -28,6 +28,7 @@ public static class BenefitPricing
 
     private static bool IsFormerBenefitPeriod()
     {
+        // TODO TD-04: Час залежить від DateTime.Today; старий тариф не покрито; до 12.12.2026.
         return DateTime.Today < new DateTime(2025, 4, 1);
     }
 }

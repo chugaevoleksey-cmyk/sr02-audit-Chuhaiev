@@ -20,6 +20,7 @@ public class PrescriptionService
     }
 
     // days: 0 = стандартні 30 днів (контрольовані - 5)
+    // TODO TD-06: Issue залишає сім параметрів і рядкову категорію; до 12.12.2026.
     public string Issue(string patient, string category, string phone, string code, int qty,
         int days, string doctor)
     {
@@ -88,6 +89,7 @@ public class PrescriptionService
             return 0;
         }
         UpdatePrescription(prescription, dispensedQuantity, pharmacistCode);
+        // TODO TD-01: Дженерик оплачується за ціною початкового препарату; до 12.12.2026.
         decimal amount = BenefitPricing.CalculateCharge(prescription, medicine, dispensedQuantity);
         prescription.Paid = prescription.Paid + amount;
         AuditLog.Write("DISPENSE", prescriptionNumber + " " + medicineCode + " x" + dispensedQuantity + " = " + amount);
@@ -160,6 +162,7 @@ public class PrescriptionService
         {
             if (batch.ExpiryDate < DateTime.Today)
                 continue;
+            // TODO TD-02: Від’ємний залишок партії дає від’ємну оплату; до 28.11.2026.
             int quantityFromBatch = Math.Min(batch.Qty, requestedQuantity - dispensedQuantity);
             batch.Qty = batch.Qty - quantityFromBatch;
             dispensedQuantity = dispensedQuantity + quantityFromBatch;

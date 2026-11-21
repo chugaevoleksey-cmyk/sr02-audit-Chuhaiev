@@ -1,0 +1,98 @@
+[
+  {
+    "code": "R02",
+    "title": "назвіть змінні відпуску та денний звіт",
+    "sha": "e9b5e91ef99bc4753020258bf319233209517fc4",
+    "seconds": 2.811,
+    "tests": 42,
+    "remote": "03fab2e350ad4dc4febeee972191331a8b5c0d93"
+  },
+  {
+    "code": "R17",
+    "title": "видаліть закоментований SMS-код",
+    "sha": "fec20d918d4cdb0caeefa1eef0bada997de62902",
+    "seconds": 2.891,
+    "tests": 42,
+    "remote": "a5715ce172598b5071e0f479ef6781b6339f305e"
+  },
+  {
+    "code": "R04",
+    "title": "назвіть межі кількості строки та ставки",
+    "sha": "6a17ca7a805af1202f3b101a83bf07b53399fbbf",
+    "seconds": 2.853,
+    "tests": 42,
+    "remote": "8a870cef7c2e8994b1f5d3c9f19dceff9675ca92"
+  },
+  {
+    "code": "R03",
+    "title": "назвіть вік рецепта в днях",
+    "sha": "363cd4041602086dfec9ede03890f893db8b9364",
+    "seconds": 2.863,
+    "tests": 42,
+    "remote": "644d96afdd0cee2c44bd2ef30f056cd35d22c1ca"
+  },
+  {
+    "code": "R01",
+    "title": "виділіть етапи відпуску та рядок звіту",
+    "sha": "21c4ba1b158a9b87f490b9823bcf347ebfda91ad",
+    "seconds": 2.955,
+    "tests": 42,
+    "remote": "03c8d4f681dc7f9010f0b7ec2771c94dc04f63f5"
+  },
+  {
+    "code": "R06",
+    "title": "замініть вкладений пошук ранніми виходами",
+    "sha": "d34c9085e552d9094970eecd44a5d514f7266583",
+    "seconds": 2.839,
+    "tests": 42,
+    "remote": "4fe7671e7c6722ebc54d21b3b654a8a3cc0eb2fe"
+  },
+  {
+    "code": "R05",
+    "title": "відокремте умову та гілки пільгової оплати",
+    "sha": "e8eb46c2e576a4a4ba9e96f9b880b234ad3ca834",
+    "seconds": 2.84,
+    "tests": 42,
+    "remote": "af2a96e449b700815f22716eac6005d8b0cc770b"
+  },
+  {
+    "code": "R09",
+    "title": "виділіть клас політики пільгової оплати",
+    "sha": "1f14ebe626a11127f6f4d8d3e422e0c33e756171",
+    "seconds": 2.957,
+    "tests": 42,
+    "remote": "337f36540eddb7dd229b7df8ae0fea76768f5ed9"
+  },
+  {
+    "code": "R10",
+    "title": "перенесіть підрахунок залишку до репозиторію",
+    "sha": "944cfa3b3b2617c039d0d5fe8acd7a7787a18925",
+    "seconds": 2.901,
+    "tests": 42,
+    "remote": "fd81a18056a692e338d2c7964acd1b9d4ca69992"
+  },
+  {
+    "code": "R08",
+    "title": "опишіть переходи станів таблицею предикатів",
+    "sha": "876e36e0253c6805ca13fa16afab462a10a32973",
+    "seconds": 2.822,
+    "tests": 42,
+    "remote": "3b037dcb2ea3be89ab9b209c93d17d647fd8fc5f"
+  },
+  {
+    "code": "R15",
+    "title": "замініть тимчасове поле запитом суми",
+    "sha": "8509c48d16f4fb720227f59aa32bd578e11ecdbe",
+    "seconds": 2.837,
+    "tests": 42,
+    "remote": "50360753396a4bd8cad54b323bc70803f3350873"
+  },
+  {
+    "code": "R13",
+    "title": "захистіть посилання на списки від підміни",
+    "sha": "c66c406fe189671e9f7ab754ff9318e1045b4656",
+    "seconds": 2.768,
+    "tests": 42,
+    "remote": "72efcbba39175bdad1b703cd3d38ba7e2ea563e3"
+  }
+]

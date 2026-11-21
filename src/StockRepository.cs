@@ -6,6 +6,7 @@ public class StockRepository
     private static int nextNo = 1;   // спільна нумерація для всіх кас
     public List<Medicine> Medicines { get; } = new List<Medicine>();
     public List<StockBatch> Batches { get; } = new List<StockBatch>();
+    // TODO TD-05: Відкриті елементи колекцій і довільні стани рецепта; до 12.12.2026.
     public List<Prescription> Prescriptions { get; } = new List<Prescription>();
 
     public string NextNumber()

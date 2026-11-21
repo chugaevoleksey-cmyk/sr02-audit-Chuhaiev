@@ -15,6 +15,7 @@ public static class AuditLog
             string line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ";" + op + ";" + text;
             File.AppendAllText(FilePath, line + "\n");
         }
+        // TODO TD-03: Збій журналу аудиту приховується порожнім catch; до 28.11.2026.
         catch { }
     }
 }
