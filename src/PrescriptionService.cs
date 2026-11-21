@@ -84,7 +84,8 @@ public class PrescriptionService
             LastMessage = "Prescription " + prescriptionNumber + " is " + prescription.Status;
             return -1;
         }
-        if ((DateTime.Today - prescription.IssuedOn.Date).Days > prescription.ValidDays)
+        int prescriptionAgeDays = (DateTime.Today - prescription.IssuedOn.Date).Days;
+        if (prescriptionAgeDays > prescription.ValidDays)
         {
             prescription.Status = PrescriptionStatus.Expired;
             LastMessage = "Prescription " + prescriptionNumber + " has expired";
