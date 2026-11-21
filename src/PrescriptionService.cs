@@ -2,6 +2,12 @@ namespace PharmacyStock;
 
 public class PrescriptionService
 {
+    private const int MaximumIssueQuantity = 10;
+    private const int ControlledValidDays = 10;
+    private const int DefaultValidDays = 30;
+    private const int MoneyDecimalPlaces = 2;
+    private const decimal PensionerPaymentFactor = 0.5m;
+    private const decimal FormerPensionerPaymentFactor = 0.7m;
     public static int DispenseCount;   // для звіту зміни
     public StockRepository repo;
     public string LastMessage = "";    // причина відмови
@@ -27,12 +33,12 @@ public class PrescriptionService
             LastMessage = "Unknown medicine " + code;
             return null;
         }
-        if (qty <= 0 || qty > 10)
+        if (qty <= 0 || qty > MaximumIssueQuantity)
             throw new ArgumentException("Quantity must be 1..10, got " + qty);
         if (m.IsControlled)
-            days = 10;
+            days = ControlledValidDays;
         else if (days <= 0)
-            days = 30;
+            days = DefaultValidDays;
         Prescription p = new Prescription();
         p.Number = repo.NextNumber();   // TODO: номер з eHealth
         p.PatientName = patient;
@@ -145,15 +151,15 @@ public class PrescriptionService
         switch (prescription.Category)
         {
             case "PENSIONER":
-                paymentFactor = 0.5m;
+                paymentFactor = PensionerPaymentFactor;
                 if (DateTime.Today < new DateTime(2025, 4, 1))
-                    paymentFactor = 0.7m;
+                    paymentFactor = FormerPensionerPaymentFactor;
                 break;
             case "DISABLED":
                 paymentFactor = 0m;
                 break;
         }
-        decimal amount = Math.Round(medicine.Price * dispensedQuantity * paymentFactor, 2);
+        decimal amount = Math.Round(medicine.Price * dispensedQuantity * paymentFactor, MoneyDecimalPlaces);
         prescription.Paid = prescription.Paid + amount;
         AuditLog.Write("DISPENSE", prescriptionNumber + " " + medicineCode + " x" + dispensedQuantity + " = " + amount);
         return amount;

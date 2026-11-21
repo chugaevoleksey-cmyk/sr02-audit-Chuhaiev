@@ -3,6 +3,9 @@ namespace PharmacyStock;
 // Прийом товару від дистриб'юторів
 public class InventoryService
 {
+    private const int MinimumShelfLifeDays = 90;
+    private const int ShelfCapacity = 50;
+    private const decimal MinimumPriceMultiplier = 1.25m;
     private StockRepository repo;
 
     public InventoryService(StockRepository r)
@@ -24,7 +27,7 @@ public class InventoryService
             return false;
         }
         // менше 3 міс. до кінця терміну - не приймаємо
-        if ((expiry.Date - DateTime.Today).Days < 90)
+        if ((expiry.Date - DateTime.Today).Days < MinimumShelfLifeDays)
         {
             Console.WriteLine("  receive: " + batchNo + " expires too soon");
             return false;
@@ -38,13 +41,13 @@ public class InventoryService
                 continue;
             total = total + b.Qty;
         }
-        if (total + qty > 50)   // temporary limit until shelves are in the catalog
+        if (total + qty > ShelfCapacity)   // temporary limit until shelves are in the catalog
         {
             Console.WriteLine("  receive: " + code + " over shelf limit (" + total + ")");
             return false;
         }
         repo.AddBatch(code, batchNo, expiry, qty);
-        if (cost * 1.25m > m.Price)
+        if (cost * MinimumPriceMultiplier > m.Price)
             Console.WriteLine("  receive: margin below 25% for " + m.Name);
         Console.WriteLine("  received " + code + " " + batchNo + " x" + qty);
         AuditLog.Write("RECEIVE", code + " " + batchNo + " +" + qty);
