@@ -32,7 +32,7 @@ public class Program
         ReportPrinter rep = new ReportPrinter(repo);
         rep.PrintReceipt("RX-000001");
         rep.PrintStock();
-        rep.print_day();
+        rep.PrintDay();
         Console.WriteLine("Dispense calls: " + PrescriptionService.DispenseCount);
     }
 

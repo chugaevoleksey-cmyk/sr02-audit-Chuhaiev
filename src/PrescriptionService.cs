@@ -64,101 +64,101 @@ public class PrescriptionService
     // Видали менше, ніж треба - PartiallyDispensed.
     // k - пільга: пенсіонери 50%, інваліди безкоштовно.
     // Повертає суму; -1 - відмова (див. LastMessage).
-    public decimal Dispense(string no, int q, bool x, string who)
+    public decimal Dispense(string prescriptionNumber, int requestedQuantity, bool allowGeneric, string pharmacistCode)
     {
         DispenseCount++;
         LastMessage = "";
         // 1. рецепт
-        Prescription p = repo.FindPrescription(no);
-        if (p == null)
+        Prescription prescription = repo.FindPrescription(prescriptionNumber);
+        if (prescription == null)
         {
-            LastMessage = "Prescription " + no + " not found";
+            LastMessage = "Prescription " + prescriptionNumber + " not found";
             return -1;
         }
-        if (p.Status > PrescriptionStatus.PartiallyDispensed)   // вже закритий
+        if (prescription.Status > PrescriptionStatus.PartiallyDispensed)   // вже закритий
         {
-            LastMessage = "Prescription " + no + " is " + p.Status;
+            LastMessage = "Prescription " + prescriptionNumber + " is " + prescription.Status;
             return -1;
         }
-        if ((DateTime.Today - p.IssuedOn.Date).Days > p.ValidDays)
+        if ((DateTime.Today - prescription.IssuedOn.Date).Days > prescription.ValidDays)
         {
-            p.Status = PrescriptionStatus.Expired;
-            LastMessage = "Prescription " + no + " has expired";
+            prescription.Status = PrescriptionStatus.Expired;
+            LastMessage = "Prescription " + prescriptionNumber + " has expired";
             return -1;
         }
-        Medicine m = repo.FindMedicine(p.MedicineCode);
-        string c = m.Code;
+        Medicine medicine = repo.FindMedicine(prescription.MedicineCode);
+        string medicineCode = medicine.Code;
         // 2. кількість
-        int res2 = p.Quantity - p.DispensedQty;
-        if (q <= 0 || q > res2)
-            q = res2;
-        if (m.IsControlled)
+        int remainingQuantity = prescription.Quantity - prescription.DispensedQty;
+        if (requestedQuantity <= 0 || requestedQuantity > remainingQuantity)
+            requestedQuantity = remainingQuantity;
+        if (medicine.IsControlled)
         {
-            if (string.IsNullOrEmpty(who))
+            if (string.IsNullOrEmpty(pharmacistCode))
             {
-                LastMessage = "Pharmacist code required for " + m.Name;
+                LastMessage = "Pharmacist code required for " + medicine.Name;
                 return -1;
             }
-            q = Math.Min(q, m.MaxPerDispense);
-            x = false;
-            Console.WriteLine("  [controlled log] " + m.Name + " x" + q + ", " + who);
+            requestedQuantity = Math.Min(requestedQuantity, medicine.MaxPerDispense);
+            allowGeneric = false;
+            Console.WriteLine("  [controlled log] " + medicine.Name + " x" + requestedQuantity + ", " + pharmacistCode);
         }
         // 3. заміна на дженерик
-        if (x && StockOf(c) < q)
+        if (allowGeneric && StockOf(medicineCode) < requestedQuantity)
         {
-            foreach (Medicine g in repo.Medicines)
+            foreach (Medicine generic in repo.Medicines)
             {
-                if (g.Inn == m.Inn && g.Code != c)
+                if (generic.Inn == medicine.Inn && generic.Code != medicineCode)
                 {
-                    if (StockOf(g.Code) >= q)
+                    if (StockOf(generic.Code) >= requestedQuantity)
                     {
-                        p.History.Add("Generic " + g.Code);
-                        c = g.Code;
+                        prescription.History.Add("Generic " + generic.Code);
+                        medicineCode = generic.Code;
                         break;
                     }
                 }
             }
         }
         // 4. списання з партій (FEFO)
-        int n = 0;
-        foreach (StockBatch b in repo.BatchesFor(c))
+        int dispensedQuantity = 0;
+        foreach (StockBatch batch in repo.BatchesFor(medicineCode))
         {
-            if (b.ExpiryDate < DateTime.Today)
+            if (batch.ExpiryDate < DateTime.Today)
                 continue;
-            int t = Math.Min(b.Qty, q - n);
-            b.Qty = b.Qty - t;
-            n = n + t;
+            int quantityFromBatch = Math.Min(batch.Qty, requestedQuantity - dispensedQuantity);
+            batch.Qty = batch.Qty - quantityFromBatch;
+            dispensedQuantity = dispensedQuantity + quantityFromBatch;
         }
-        if (n == 0)
+        if (dispensedQuantity == 0)
         {
-            LastMessage = "Out of stock: " + m.Name;
+            LastMessage = "Out of stock: " + medicine.Name;
             return 0;
         }
         // 5. статус рецепта
-        p.DispensedQty = p.DispensedQty + n;
-        p.LastPharmacist = who;
-        if (p.DispensedQty >= p.Quantity)
-            p.Status = PrescriptionStatus.Dispensed;
+        prescription.DispensedQty = prescription.DispensedQty + dispensedQuantity;
+        prescription.LastPharmacist = pharmacistCode;
+        if (prescription.DispensedQty >= prescription.Quantity)
+            prescription.Status = PrescriptionStatus.Dispensed;
         else
-            p.Status = PrescriptionStatus.PartiallyDispensed;
-        p.History.Add(p.Status + " " + n);
+            prescription.Status = PrescriptionStatus.PartiallyDispensed;
+        prescription.History.Add(prescription.Status + " " + dispensedQuantity);
         // 6. сума з урахуванням пільги
-        decimal k = 1m;
-        switch (p.Category)
+        decimal paymentFactor = 1m;
+        switch (prescription.Category)
         {
             case "PENSIONER":
-                k = 0.5m;
+                paymentFactor = 0.5m;
                 if (DateTime.Today < new DateTime(2025, 4, 1))
-                    k = 0.7m;
+                    paymentFactor = 0.7m;
                 break;
             case "DISABLED":
-                k = 0m;
+                paymentFactor = 0m;
                 break;
         }
-        decimal s = Math.Round(m.Price * n * k, 2);
-        p.Paid = p.Paid + s;
-        AuditLog.Write("DISPENSE", no + " " + c + " x" + n + " = " + s);
-        return s;
+        decimal amount = Math.Round(medicine.Price * dispensedQuantity * paymentFactor, 2);
+        prescription.Paid = prescription.Paid + amount;
+        AuditLog.Write("DISPENSE", prescriptionNumber + " " + medicineCode + " x" + dispensedQuantity + " = " + amount);
+        return amount;
     }
 
     public bool ChangeStatus(string no, PrescriptionStatus to)

@@ -3,7 +3,7 @@ namespace PharmacyStock;
 public class ReportPrinter
 {
     private StockRepository repo;
-    private decimal dayTotal;        // рахується в print_day
+    private decimal dayTotal;        // рахується в PrintDay
 
     public ReportPrinter(StockRepository r)
     {
@@ -51,7 +51,7 @@ public class ReportPrinter
         }
     }
 
-    public void print_day()
+    public void PrintDay()
     {
         dayTotal = 0m;
         int served = 0, open = 0, pens = 0, dis = 0;
