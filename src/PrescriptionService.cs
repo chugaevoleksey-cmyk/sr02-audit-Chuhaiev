@@ -55,45 +55,15 @@ public class PrescriptionService
         return p.Number;
     }
 
-    // Відпуск за рецептом. Спочатку перевіряємо p:
-    // чи рецепт є, чи не закритий і чи не минув строк.
-    // Потім кількість: q - скільки просять, res2 -
-    // залишок за рецептом (q = 0 - видати весь залишок).
-    // Контрольовані: потрібен код провізора who, ліміт
-    // MaxPerDispense за раз, без заміни, запис у журнал.
-    // Не вистачає і x = true (згода на заміну) - беремо
-    // дженерик з тією ж МНН; c - код того, що видаємо.
-    // Списуємо партії (найближчий термін першим),
-    // прострочені пропускаємо; n - скільки видали.
-    // Видали менше, ніж треба - PartiallyDispensed.
-    // k - пільга: пенсіонери 50%, інваліди безкоштовно.
-    // Повертає суму; -1 - відмова (див. LastMessage).
-    public decimal Dispense(string prescriptionNumber, int requestedQuantity, bool allowGeneric, string pharmacistCode)
+    public decimal Dispense(string prescriptionNumber, int requestedQuantity,
+        bool allowGeneric, string pharmacistCode)
     {
         DispenseCount++;
         LastMessage = "";
-        // 1. рецепт
         Prescription prescription = repo.FindPrescription(prescriptionNumber);
-        if (prescription == null)
-        {
-            LastMessage = "Prescription " + prescriptionNumber + " not found";
+        if (!ValidatePrescription(prescription, prescriptionNumber))
             return -1;
-        }
-        if (prescription.Status > PrescriptionStatus.PartiallyDispensed)   // вже закритий
-        {
-            LastMessage = "Prescription " + prescriptionNumber + " is " + prescription.Status;
-            return -1;
-        }
-        int prescriptionAgeDays = (DateTime.Today - prescription.IssuedOn.Date).Days;
-        if (prescriptionAgeDays > prescription.ValidDays)
-        {
-            prescription.Status = PrescriptionStatus.Expired;
-            LastMessage = "Prescription " + prescriptionNumber + " has expired";
-            return -1;
-        }
         Medicine medicine = repo.FindMedicine(prescription.MedicineCode);
-        string medicineCode = medicine.Code;
-        // 2. кількість
         int remainingQuantity = prescription.Quantity - prescription.DispensedQty;
         if (requestedQuantity <= 0 || requestedQuantity > remainingQuantity)
             requestedQuantity = remainingQuantity;
@@ -108,59 +78,15 @@ public class PrescriptionService
             allowGeneric = false;
             Console.WriteLine("  [controlled log] " + medicine.Name + " x" + requestedQuantity + ", " + pharmacistCode);
         }
-        // 3. заміна на дженерик
-        if (allowGeneric && StockOf(medicineCode) < requestedQuantity)
-        {
-            foreach (Medicine generic in repo.Medicines)
-            {
-                if (generic.Inn == medicine.Inn && generic.Code != medicineCode)
-                {
-                    if (StockOf(generic.Code) >= requestedQuantity)
-                    {
-                        prescription.History.Add("Generic " + generic.Code);
-                        medicineCode = generic.Code;
-                        break;
-                    }
-                }
-            }
-        }
-        // 4. списання з партій (FEFO)
-        int dispensedQuantity = 0;
-        foreach (StockBatch batch in repo.BatchesFor(medicineCode))
-        {
-            if (batch.ExpiryDate < DateTime.Today)
-                continue;
-            int quantityFromBatch = Math.Min(batch.Qty, requestedQuantity - dispensedQuantity);
-            batch.Qty = batch.Qty - quantityFromBatch;
-            dispensedQuantity = dispensedQuantity + quantityFromBatch;
-        }
+        string medicineCode = SelectMedicineCode(prescription, medicine, requestedQuantity, allowGeneric);
+        int dispensedQuantity = DeductBatches(medicineCode, requestedQuantity);
         if (dispensedQuantity == 0)
         {
             LastMessage = "Out of stock: " + medicine.Name;
             return 0;
         }
-        // 5. статус рецепта
-        prescription.DispensedQty = prescription.DispensedQty + dispensedQuantity;
-        prescription.LastPharmacist = pharmacistCode;
-        if (prescription.DispensedQty >= prescription.Quantity)
-            prescription.Status = PrescriptionStatus.Dispensed;
-        else
-            prescription.Status = PrescriptionStatus.PartiallyDispensed;
-        prescription.History.Add(prescription.Status + " " + dispensedQuantity);
-        // 6. сума з урахуванням пільги
-        decimal paymentFactor = 1m;
-        switch (prescription.Category)
-        {
-            case "PENSIONER":
-                paymentFactor = PensionerPaymentFactor;
-                if (DateTime.Today < new DateTime(2025, 4, 1))
-                    paymentFactor = FormerPensionerPaymentFactor;
-                break;
-            case "DISABLED":
-                paymentFactor = 0m;
-                break;
-        }
-        decimal amount = Math.Round(medicine.Price * dispensedQuantity * paymentFactor, MoneyDecimalPlaces);
+        UpdatePrescription(prescription, dispensedQuantity, pharmacistCode);
+        decimal amount = CalculateCharge(prescription, medicine, dispensedQuantity);
         prescription.Paid = prescription.Paid + amount;
         AuditLog.Write("DISPENSE", prescriptionNumber + " " + medicineCode + " x" + dispensedQuantity + " = " + amount);
         return amount;
@@ -200,4 +126,90 @@ public class PrescriptionService
         }
         return total;
     }
+
+    private bool ValidatePrescription(Prescription prescription, string prescriptionNumber)
+    {
+        if (prescription == null)
+        {
+            LastMessage = "Prescription " + prescriptionNumber + " not found";
+            return false;
+        }
+        if (prescription.Status > PrescriptionStatus.PartiallyDispensed)   // вже закритий
+        {
+            LastMessage = "Prescription " + prescriptionNumber + " is " + prescription.Status;
+            return false;
+        }
+        int prescriptionAgeDays = (DateTime.Today - prescription.IssuedOn.Date).Days;
+        if (prescriptionAgeDays > prescription.ValidDays)
+        {
+            prescription.Status = PrescriptionStatus.Expired;
+            LastMessage = "Prescription " + prescriptionNumber + " has expired";
+            return false;
+        }
+        return true;
+    }
+
+    private string SelectMedicineCode(Prescription prescription, Medicine medicine, int requestedQuantity, bool allowGeneric)
+    {
+        string medicineCode = medicine.Code;
+        if (allowGeneric && StockOf(medicineCode) < requestedQuantity)
+        {
+            foreach (Medicine generic in repo.Medicines)
+            {
+                if (generic.Inn == medicine.Inn && generic.Code != medicineCode)
+                {
+                    if (StockOf(generic.Code) >= requestedQuantity)
+                    {
+                        prescription.History.Add("Generic " + generic.Code);
+                        medicineCode = generic.Code;
+                        break;
+                    }
+                }
+            }
+        }
+        return medicineCode;
+    }
+
+    private int DeductBatches(string medicineCode, int requestedQuantity)
+    {
+        int dispensedQuantity = 0;
+        foreach (StockBatch batch in repo.BatchesFor(medicineCode))
+        {
+            if (batch.ExpiryDate < DateTime.Today)
+                continue;
+            int quantityFromBatch = Math.Min(batch.Qty, requestedQuantity - dispensedQuantity);
+            batch.Qty = batch.Qty - quantityFromBatch;
+            dispensedQuantity = dispensedQuantity + quantityFromBatch;
+        }
+        return dispensedQuantity;
+    }
+
+    private static void UpdatePrescription(Prescription prescription, int dispensedQuantity, string pharmacistCode)
+    {
+        prescription.DispensedQty = prescription.DispensedQty + dispensedQuantity;
+        prescription.LastPharmacist = pharmacistCode;
+        if (prescription.DispensedQty >= prescription.Quantity)
+            prescription.Status = PrescriptionStatus.Dispensed;
+        else
+            prescription.Status = PrescriptionStatus.PartiallyDispensed;
+        prescription.History.Add(prescription.Status + " " + dispensedQuantity);
+    }
+
+    private static decimal CalculateCharge(Prescription prescription, Medicine medicine, int dispensedQuantity)
+    {
+        decimal paymentFactor = 1m;
+        switch (prescription.Category)
+        {
+            case "PENSIONER":
+                paymentFactor = PensionerPaymentFactor;
+                if (DateTime.Today < new DateTime(2025, 4, 1))
+                    paymentFactor = FormerPensionerPaymentFactor;
+                break;
+            case "DISABLED":
+                paymentFactor = 0m;
+                break;
+        }
+        return Math.Round(medicine.Price * dispensedQuantity * paymentFactor, MoneyDecimalPlaces);
+    }
+
 }

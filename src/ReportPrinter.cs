@@ -17,14 +17,7 @@ public class ReportPrinter
             return;
         Medicine m = repo.FindMedicine(p.MedicineCode);
         Console.WriteLine("Receipt for " + p.PatientName + ", phone " + p.MaskedPhone());
-        string line = p.Number + " | " + p.PatientName + " | " + p.MedicineCode;
-        line = line + " | " + p.DispensedQty + "/" + p.Quantity;
-        line = line + " | " + p.Status;
-        if (p.Category != "")
-            line = line + " | " + p.Category;
-        if (p.Paid > 0)
-            line = line + " | paid " + p.Paid.ToString("0.00");
-        Console.WriteLine("  " + line);
+        PrintRegisterLine(p);
         Console.WriteLine("  " + m.Name + ", " + p.Doctor + ", pharmacist " + p.LastPharmacist);
         if (p.HasBenefit())
             Console.WriteLine("  Benefit: " + p.Category.ToLower() + " (state program)");
@@ -58,14 +51,7 @@ public class ReportPrinter
         Console.WriteLine("Register:");
         foreach (Prescription p in repo.Prescriptions)
         {
-            string line = p.Number + " | " + p.PatientName + " | " + p.MedicineCode;
-            line = line + " | " + p.DispensedQty + "/" + p.Quantity;
-            line = line + " | " + p.Status;
-            if (p.Category != "")
-                line = line + " | " + p.Category;
-            if (p.Paid > 0)
-                line = line + " | paid " + p.Paid.ToString("0.00");
-            Console.WriteLine("  " + line);
+            PrintRegisterLine(p);
             if (p.DispensedQty > 0)
                 served++;
             dayTotal = dayTotal + p.Paid;
@@ -87,4 +73,17 @@ public class ReportPrinter
         decimal vat = Math.Round(dayTotal * 7 / 107, 2);   // ПДВ на ліки 20%
         Console.WriteLine("Cash: " + dayTotal.ToString("0.00") + ", VAT " + vat.ToString("0.00"));
     }
+
+    private static void PrintRegisterLine(Prescription p)
+    {
+        string line = p.Number + " | " + p.PatientName + " | " + p.MedicineCode;
+        line = line + " | " + p.DispensedQty + "/" + p.Quantity;
+        line = line + " | " + p.Status;
+        if (p.Category != "")
+            line = line + " | " + p.Category;
+        if (p.Paid > 0)
+            line = line + " | paid " + p.Paid.ToString("0.00");
+        Console.WriteLine("  " + line);
+    }
+
 }
