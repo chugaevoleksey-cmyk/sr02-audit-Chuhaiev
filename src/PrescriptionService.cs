@@ -5,9 +5,6 @@ public class PrescriptionService
     private const int MaximumIssueQuantity = 10;
     private const int ControlledValidDays = 10;
     private const int DefaultValidDays = 30;
-    private const int MoneyDecimalPlaces = 2;
-    private const decimal PensionerPaymentFactor = 0.5m;
-    private const decimal FormerPensionerPaymentFactor = 0.7m;
     public static int DispenseCount;   // для звіту зміни
     public StockRepository repo;
     public string LastMessage = "";    // причина відмови
@@ -86,7 +83,7 @@ public class PrescriptionService
             return 0;
         }
         UpdatePrescription(prescription, dispensedQuantity, pharmacistCode);
-        decimal amount = CalculateCharge(prescription, medicine, dispensedQuantity);
+        decimal amount = BenefitPricing.CalculateCharge(prescription, medicine, dispensedQuantity);
         prescription.Paid = prescription.Paid + amount;
         AuditLog.Write("DISPENSE", prescriptionNumber + " " + medicineCode + " x" + dispensedQuantity + " = " + amount);
         return amount;
@@ -192,28 +189,11 @@ public class PrescriptionService
         prescription.History.Add(prescription.Status + " " + dispensedQuantity);
     }
 
-    private static decimal CalculateCharge(Prescription prescription, Medicine medicine,
-        int dispensedQuantity)
-    {
-        return Math.Round(medicine.Price * dispensedQuantity * PaymentFactor(prescription), MoneyDecimalPlaces);
-    }
 
 
-    private static decimal PaymentFactor(Prescription prescription)
-    {
-        if (prescription.Category == "PENSIONER")
-            return PensionerFactor();
-        if (prescription.Category == "DISABLED")
-            return 0m;
-        return 1m;
-    }
-    private static decimal PensionerFactor()
-    {
-        return IsFormerBenefitPeriod() ? FormerPensionerPaymentFactor : PensionerPaymentFactor;
-    }
-    private static bool IsFormerBenefitPeriod()
-    {
-        return DateTime.Today < new DateTime(2025, 4, 1);
-    }
+
+
+
+
 
 }
